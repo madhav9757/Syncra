@@ -16,13 +16,26 @@
     <b>"Assume the Server is Malicious."</b><br>
     <i>This is the founding principle of Syncra. Every line of code in the client is written with the expectation that the relay server is being monitored by a third party.</i>
   </p>
+</div>
+
+### <img src="static/icons/bulb.svg" width="24" style="vertical-align: middle; margin-right: 8px;"> About Syncra
+
+**Syncra** is a high-performance, security-first messaging infrastructure designed for the modern era of privacy. Unlike traditional messaging platforms that rely on trusted central servers, Syncra operates on a **Blind Relay** model. This means the server lacks the cryptographic keys required to decrypt any conversational data, ensuring that even if the infrastructure is compromised, your messages remain sovereign and unreadable to third parties.
+
+Built with **Go**, Syncra leverages advanced concurrency patterns to handle thousands of simultaneous WebSocket connections with minimal latency. It combines the speed of a distributed networking stack with the uncompromising security of **Ed25519** digital signatures and **AES-256-GCM** encryption. Whether you're communicating across a local network or a global cluster, Syncra provides a seamless, real-time experience through its **Redis-backed horizontal scaling**.
+
+#### Core Pillars:
+
+- **Absolute Privacy**: True End-to-End Encryption (E2EE) where only the recipients hold the keys.
+- **Stateless Resilience**: A relay architecture that stores zero history, mitigating long-term data breach risks.
+- **Developer-Centric**: A modular codebase designed for extensibility, from the cryptographic pipelines to the reactive Terminal UI.
+- **Enterprise Ready**: Designed to bypass restrictive firewalls and operate in high-security environments using standard WSS protocols.
 
 ---
 
-</div>
-
 ## <img src="static/icons/book.svg" width="24" style="vertical-align: middle; margin-right: 8px;"> Table of Contents
 
+- [<img src="static/icons/bulb.svg" width="18" style="vertical-align: middle; margin-right: 4px;"> About Syncra](#-about-syncra)
 - [<img src="static/icons/layers.svg" width="18" style="vertical-align: middle; margin-right: 4px;"> Infrastructure & Scalability](#%EF%B8%8F-infrastructure--scalability)
 - [<img src="static/icons/folder.svg" width="18" style="vertical-align: middle; margin-right: 4px;"> Best-Practice Project Organization](#-best-practice-project-organization)
 - [<img src="static/icons/lock.svg" width="18" style="vertical-align: middle; margin-right: 4px;"> Cryptographic Protocol Deep Dive](#-cryptographic-protocol-deep-dive)
