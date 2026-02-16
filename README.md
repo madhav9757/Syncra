@@ -9,6 +9,7 @@
 [![Security: E2EE](https://img.shields.io/badge/Security-E2EE-00b4d8?style=for-the-badge&logo=shield&logoColor=white)](https://en.wikipedia.org/wiki/End-to-end_encryption)
 [![Architecture: Zero--Knowledge](https://img.shields.io/badge/Architecture-Zero--Knowledge-ff9f1c?style=for-the-badge&logo=blueprint&logoColor=white)](https://en.wikipedia.org/wiki/Zero-knowledge_proof)
 [![Status: Blueprint](https://img.shields.io/badge/Status-Blueprint-green?style=for-the-badge)](https://github.com/)
+[![Database: Neon](https://img.shields.io/badge/Database-Neon-00E599?style=for-the-badge&logo=postgresql&logoColor=white)](https://neon.tech)
 
 ---
 
@@ -142,6 +143,7 @@ The backend isn't just a single server; it's a **stateless relay cluster**.
 - **WSS (WebSocket Secure)**: We use `:443` to bypass 99% of corporate firewalls that block non-standard ports.
 - **Redis Pub/Sub**: Crucial for horizontal scaling. If `User A` is on `Node 1` and `User B` is on `Node 2`, Redis acts as the glue that routes the encrypted packet between nodes.
 - **Statelessness**: The relay nodes store **zero** conversational state.
+- **Neon Serverless Postgres**: We utilize **Neon** for high-performance, scalable storage of user identities and metadata, separating concerns from the stateless message relay.
 
 ---
 
@@ -204,6 +206,13 @@ Instead of a database, we use flat files for speed and portability.
 
 - **Path**: `~/.syncra/chats/<contact_id>.log`
 - **Format**: JSONL (JSON Lines).
+
+### 2. Identity & Metadata (Neon DB)
+
+While message content remains local and E2EE, user identities and authentication states are managed via **Neon Serverless Postgres**.
+
+- **Connection**: Managed via `pgxpool` for high-concurrency performance.
+- **Role**: Strictly stores non-conversational data (User IDs, Public Keys, Profiles) to maintain the "Blind Relay" promise.
 
 ---
 
