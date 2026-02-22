@@ -1,18 +1,19 @@
 <div align="center">
-  <img src="static/syncra(logo).png" alt="Syncra Logo" width="180">
+  <img src="static/syncra(main logo).png" alt="Syncra Logo" width="180">
+  <img src="static/syncra(text only logo).png" alt="Syncra Sub Logo" width="180">
+</div>
 
-# <img src="static/icons/lock.svg" width="32" style="vertical-align: middle; margin-right: 8px;"> Syncra
+<div align="center">
 
 ### The Definitive Technical Blueprint for High-Performance E2EE Communication
 
-[![Go Version](https://img.shields.io/badge/Go-1.21%2B-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://golang.org)
-[![Security: E2EE](https://img.shields.io/badge/Security-E2EE-00b4d8?style=for-the-badge&logo=shield&logoColor=white)](https://en.wikipedia.org/wiki/End-to-end_encryption)
-[![Architecture: Zero--Knowledge](https://img.shields.io/badge/Architecture-Zero--Knowledge-ff9f1c?style=for-the-badge&logo=blueprint&logoColor=white)](https://en.wikipedia.org/wiki/Zero-knowledge_proof)
-[![Status: Blueprint](https://img.shields.io/badge/Status-Blueprint-green?style=for-the-badge)](https://github.com/)
-[![Database: Neon](https://img.shields.io/badge/Database-Neon-00E599?style=for-the-badge&logo=postgresql&logoColor=white)](https://neon.tech)
+[![Go Version](https://img.shields.io/badge/Go-1.21%2B-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://golang.org) [![Security: E2EE](https://img.shields.io/badge/Security-E2EE-00b4d8?style=for-the-badge&logo=shield&logoColor=white)](https://en.wikipedia.org/wiki/End-to-end_encryption) [![Architecture: Zero--Knowledge](https://img.shields.io/badge/Architecture-Zero--Knowledge-ff9f1c?style=for-the-badge&logo=blueprint&logoColor=white)](https://en.wikipedia.org/wiki/Zero-knowledge_proof) [![Database: Neon](https://img.shields.io/badge/Database-Neon-00E599?style=for-the-badge&logo=postgresql&logoColor=white)](https://neon.tech) [![Status: Blueprint](https://img.shields.io/badge/Status-Blueprint-green?style=for-the-badge)](https://github.com/)
+
+</div>
 
 ---
 
+<div align="center">
   <p align="center">
     <b>"Assume the Server is Malicious."</b><br>
     <i>This is the founding principle of Syncra. Every line of code in the client is written with the expectation that the relay server is being monitored by a third party.</i>

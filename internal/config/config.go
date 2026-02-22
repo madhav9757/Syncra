@@ -9,6 +9,8 @@ import (
 
 type Config struct {
 	WorkspacePath string `json:"workspace_path"`
+	Username      string `json:"username"`
+	FullName      string `json:"full_name"`
 }
 
 func GetConfigPath() (string, error) {

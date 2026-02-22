@@ -8,40 +8,41 @@ import (
 // CreateUser inserts a new user into the database
 func (db *DB) CreateUser(ctx context.Context, user *models.User) error {
 	query := `
-		INSERT INTO users (username, email, password_hash, bio, avatar_url)
-		VALUES ($1, $2, $3, $4, $5)
-		RETURNING id, created_at, updated_at
+		INSERT INTO users (id, username, full_name, public_key_hash, created_at)
+		VALUES (gen_random_uuid(), $1, $2, $3, NOW())
+		RETURNING id, created_at
 	`
 	err := db.Pool.QueryRow(ctx, query,
 		user.Username,
-		user.Email,
-		user.PasswordHash,
-		user.Bio,
-		user.AvatarURL,
-	).Scan(&user.ID, &user.CreatedAt, &user.UpdatedAt)
+		user.FullName,
+		user.PublicKeyHash,
+	).Scan(&user.ID, &user.CreatedAt)
 
 	return err
 }
 
-// GetUserByEmail retrieves a user by their email
-func (db *DB) GetUserByEmail(ctx context.Context, email string) (*models.User, error) {
+// IsUsernameTaken checks if a username already exists in the database
+func (db *DB) IsUsernameTaken(ctx context.Context, username string) (bool, error) {
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)`
+	err := db.Pool.QueryRow(ctx, query, username).Scan(&exists)
+	return exists, err
+}
+
+// GetUserByUsername retrieves a user by their username
+func (db *DB) GetUserByUsername(ctx context.Context, username string) (*models.User, error) {
 	user := &models.User{}
 	query := `
-		SELECT id, username, email, password_hash, bio, avatar_url, is_active, last_login, created_at, updated_at
+		SELECT id, username, full_name, public_key_hash, created_at
 		FROM users
-		WHERE email = $1
+		WHERE username = $1
 	`
-	err := db.Pool.QueryRow(ctx, query, email).Scan(
+	err := db.Pool.QueryRow(ctx, query, username).Scan(
 		&user.ID,
 		&user.Username,
-		&user.Email,
-		&user.PasswordHash,
-		&user.Bio,
-		&user.AvatarURL,
-		&user.IsActive,
-		&user.LastLogin,
+		&user.FullName,
+		&user.PublicKeyHash,
 		&user.CreatedAt,
-		&user.UpdatedAt,
 	)
 
 	if err != nil {
@@ -50,29 +51,9 @@ func (db *DB) GetUserByEmail(ctx context.Context, email string) (*models.User, e
 	return user, nil
 }
 
-// GetUserByID retrieves a user by their ID
-func (db *DB) GetUserByID(ctx context.Context, id string) (*models.User, error) {
-	user := &models.User{}
-	query := `
-		SELECT id, username, email, password_hash, bio, avatar_url, is_active, last_login, created_at, updated_at
-		FROM users
-		WHERE id = $1
-	`
-	err := db.Pool.QueryRow(ctx, query, id).Scan(
-		&user.ID,
-		&user.Username,
-		&user.Email,
-		&user.PasswordHash,
-		&user.Bio,
-		&user.AvatarURL,
-		&user.IsActive,
-		&user.LastLogin,
-		&user.CreatedAt,
-		&user.UpdatedAt,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
+// UpdateFullName updates the full name of a user in the database
+func (db *DB) UpdateFullName(ctx context.Context, username, fullName string) error {
+	query := `UPDATE users SET full_name = $1 WHERE username = $2`
+	_, err := db.Pool.Exec(ctx, query, fullName, username)
+	return err
 }
