@@ -80,3 +80,10 @@ func InitializeStructure(basePath string) error {
 
 	return nil
 }
+func PurgeConfig() error {
+	path, err := GetConfigPath()
+	if err != nil {
+		return err
+	}
+	return os.Remove(path)
+}

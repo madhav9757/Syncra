@@ -5,7 +5,10 @@ import (
 	"os"
 	"time"
 
+	"log"
+	"net/http"
 	"syncra/internal/server/database"
+	"syncra/internal/server/websocket"
 	"syncra/internal/ui"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -20,16 +23,23 @@ type dbConnectedMsg struct {
 
 type serverModel struct {
 	db        *database.DB
+	hub       *websocket.Hub
 	err       error
 	loading   bool
 	startTime time.Time
 	tick      int
+	port      string
 }
 
 func initialModel() serverModel {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	return serverModel{
 		loading:   true,
 		startTime: time.Now(),
+		port:      port,
 	}
 }
 
@@ -53,6 +63,22 @@ func (m serverModel) Init() tea.Cmd {
 	return tea.Batch(connectToDB, tick())
 }
 
+func startRelay(hub *websocket.Hub, port string) tea.Cmd {
+	return func() tea.Msg {
+		go hub.Run()
+
+		http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+			websocket.ServeWs(hub, w, r)
+		})
+
+		log.Printf("Starting relay server on :%s", port)
+		if err := http.ListenAndServe(":"+port, nil); err != nil {
+			return errMsg(fmt.Errorf("server failed: %v", err))
+		}
+		return nil
+	}
+}
+
 func (m serverModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -70,7 +96,8 @@ func (m serverModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case dbConnectedMsg:
 		m.loading = false
 		m.db = msg.db
-		return m, nil
+		m.hub = websocket.NewHub()
+		return m, startRelay(m.hub, m.port)
 
 	case errMsg:
 		m.loading = false
@@ -101,9 +128,10 @@ func (m serverModel) View() string {
 			onlineTag = " • ONLINE "
 		}
 
-		statusContent = fmt.Sprintf("%s\n\n%s %s\n%s %s\n%s %s",
+		statusContent = fmt.Sprintf("%s\n\n%s %s\n%s %s\n%s %s\n%s %s",
 			ui.StatusLabelStyle.Background(ui.Success).Foreground(lipgloss.Color("#FFFFFF")).Render(onlineTag),
 			ui.InfoKeyStyle.Render("Database"), ui.InfoValueStyle.Render("Neon PostreSQL (Cloud)"),
+			ui.InfoKeyStyle.Render("Endpoint"), ui.InfoValueStyle.Render(":"+m.port+"/ws"),
 			ui.InfoKeyStyle.Render("Protocol"), ui.InfoValueStyle.Render("WSS / AES-256-GCM"),
 			ui.InfoKeyStyle.Render("Uptime"), ui.InfoValueStyle.Foreground(ui.Secondary).Render(time.Since(m.startTime).Truncate(time.Second).String()),
 		)

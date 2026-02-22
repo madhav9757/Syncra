@@ -48,3 +48,9 @@ func LoadPrivateKey(path string) (ed25519.PrivateKey, error) {
 	}
 	return ed25519.PrivateKey(data), nil
 }
+
+// Sign signs a message using the private key and returns hex encoded signature
+func Sign(priv ed25519.PrivateKey, message []byte) string {
+	sig := ed25519.Sign(priv, message)
+	return hex.EncodeToString(sig)
+}

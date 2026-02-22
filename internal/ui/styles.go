@@ -3,58 +3,79 @@ package ui
 import "github.com/charmbracelet/lipgloss"
 
 var (
-	Primary   = lipgloss.Color("#7D56F4") // Vibrant Purple
-	Secondary = lipgloss.Color("#00E5FF") // Electric Cyan
-	Accent    = lipgloss.Color("#FF4081") // Hot Pink
-	Success   = lipgloss.Color("#00C853") // Emerald Green
-	Warning   = lipgloss.Color("#FFD600") // Neon Gold
-	ErrorCol  = lipgloss.Color("#FF1744") // Radical Red
-	Bg        = lipgloss.Color("#1A1B26") // Deep Tokyo Night Background
-	Text      = lipgloss.Color("#C0CAF5") // Soft White/Blue Text
-	Muted     = lipgloss.Color("#565F89") // Muted Blue Gray
+	// Ultra-Vibrant Neon Palette
+	Primary   = lipgloss.Color("#FF00FF") // Neon Magenta
+	Secondary = lipgloss.Color("#00FFFF") // Electric Cyan
+	Accent    = lipgloss.Color("#FFFF00") // Laser Yellow
+	Success   = lipgloss.Color("#39FF14") // Neon Green
+	Warning   = lipgloss.Color("#FFAD00") // Pure Orange
+	ErrorCol  = lipgloss.Color("#FF3131") // Neon Red
+	Bg        = lipgloss.Color("#050505") // Near Black for maximum pop
+	Text      = lipgloss.Color("#FFFFFF") // Pure White
+	Muted     = lipgloss.Color("#888888") // Medium Gray for visibility
 
+	// Minimalist Styles
 	HeaderStyle = lipgloss.NewStyle().
 			Foreground(Primary).
 			Bold(true).
-			MarginLeft(2).
-			MarginTop(1)
+			Padding(1, 1).
+			MarginLeft(1)
 
 	SubHeaderStyle = lipgloss.NewStyle().
-			Foreground(Secondary).
-			Italic(true).
-			MarginLeft(2).
+			Foreground(Muted).
+			PaddingLeft(2).
 			MarginBottom(1)
 
 	CardStyle = lipgloss.NewStyle().
-			Padding(0, 2).
-			Margin(1, 2).
+			Padding(1, 2).
+			Border(lipgloss.NormalBorder(), false, false, false, true).
+			BorderForeground(Muted).
+			MarginLeft(2).
 			Width(64)
 
 	StatusLabelStyle = lipgloss.NewStyle().
-				Bold(true).
-				MarginRight(2)
+				Padding(0, 1).
+				Bold(true)
 
 	InfoKeyStyle = lipgloss.NewStyle().
-			Foreground(Secondary).
-			Width(15)
+			Foreground(Muted).
+			Width(16)
 
 	InfoValueStyle = lipgloss.NewStyle().
-			Foreground(Text).
+			Foreground(Text)
+
+	InputStyle = lipgloss.NewStyle().
+			Foreground(Accent).
 			Bold(true)
 
 	MutedStyle = lipgloss.NewStyle().
 			Foreground(Muted)
 
 	ErrorTextStyle = lipgloss.NewStyle().
-			Foreground(ErrorCol)
+			Foreground(ErrorCol).
+			PaddingLeft(2)
 
 	FooterStyle = lipgloss.NewStyle().
 			Foreground(Muted).
-			MarginLeft(3).
 			MarginTop(1).
-			Italic(true)
+			PaddingLeft(4).
+			Faint(true)
+
+	// Layout Styles
+	MainContainerStyle = lipgloss.NewStyle().
+				Padding(1, 2).
+				Width(80)
+
+	SectionTitleStyle = lipgloss.NewStyle().
+				Foreground(Secondary).
+				Bold(true).
+				MarginBottom(1)
+
+	SelectedStyle = lipgloss.NewStyle().
+			Foreground(Primary).
+			Bold(true)
 )
 
 func SuccessStyle() lipgloss.Style {
-	return lipgloss.NewStyle().Foreground(Success).Bold(true)
+	return lipgloss.NewStyle().Foreground(Success)
 }
