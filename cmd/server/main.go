@@ -146,6 +146,34 @@ func (m serverModel) View() string {
 }
 
 func main() {
+	// Headless mode for cloud deployments
+	if os.Getenv("HEADLESS") == "true" {
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = "8080"
+		}
+
+		db, err := database.Connect()
+		if err != nil {
+			log.Fatalf("Production DB connection failed: %v", err)
+		}
+		defer db.Close()
+
+		hub := websocket.NewHub()
+		go hub.Run()
+
+		http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+			websocket.ServeWs(hub, w, r)
+		})
+
+		fmt.Printf("🚀 Syncra Secure Relay started in HEADLESS mode on :%s\n", port)
+		if err := http.ListenAndServe(":"+port, nil); err != nil {
+			log.Fatalf("Server failed: %v", err)
+		}
+		return
+	}
+
+	// Dashboard mode for local monitoring
 	p := tea.NewProgram(initialModel())
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Error: %v", err)

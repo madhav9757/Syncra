@@ -1,0 +1,12 @@
+.git
+.env
+*.exe
+syncra/
+chats/
+identities/
+node_modules/
+.agent/
+.gemini/
+.dockerignore
+Dockerfile
+fly.toml
